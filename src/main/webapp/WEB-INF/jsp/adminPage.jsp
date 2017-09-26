@@ -486,10 +486,12 @@ adminPage
                 imgname: $('#img').val(),
                 imgUrl: $('#imgUrl').val()
             },
-            function (status) {
+            function (status, error) {
                 alert(status);
-            }
-        )
+            })
+        . fail(function (xhr, status, error) {
+                alert(xhr.responseText);
+        });
     }
 </script>
 <script>
