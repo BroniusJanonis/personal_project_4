@@ -258,8 +258,8 @@ adminPage
                             .append($('<td id="expiredDatecard' + i + '">').text(slist.libraryCard.expiredDate))
                             .append($('<td id="statuscard' + i + '">').text(slist.libraryCard.status))
                             .append($('<input id="teacher_id' + i + '" type="hidden"/>').text(slist.teacher.id))
-                            .append($('<input type="button" id="edit_child_button' + i + '" value="EDIT" class="edit" onclick="edit_child_row(' + i + ')"/>'))
-                            .append($('<input type="button" id="delete_child_button' + i + '" value="DELETE" class="delete" onclick="delete_child_row(' + i + ')">'));
+                            .append($('<td><input type="button" id="edit_child_button' + i + '" value="EDIT" class="edit" onclick="edit_child_row(' + i + ')"/></td>'))
+                            .append($('<td><input type="button" id="delete_child_button' + i + '" value="DELETE" class="delete" onclick="delete_child_row(' + i + ')"/></td>'));
                     });
                 });
             }
@@ -294,8 +294,8 @@ adminPage
                 .append($('<td><input type="date" id="expiredDatecard" value="' + $('' + newExpiredDate + '').text() + '" style="width: 50px"/></td>'))
                 .append($('<td><input type="checkbox" checked="checked" id="statuscard" value="' + $('' + newStatusCard + '').text() + '" style="width: 50px"/></td>'))
                 .append($('<td><input type="text" id="teacher_id" value="' + $('' + newTeacher_id + '').text() + '" style="width: 50px"/></td>'))
-                .append($('<input type="button" id="save_teach_button' + val + '" value="SAVE" class="edit" onclick="save_child_row()"/>'))
-                .append($('<input type="button" id="delete_teach_button' + val + '" value="DELETE" class="delete" onclick="delete_child_row(' + val + ')">'));
+                .append($('<td><input type="button" id="save_teach_button' + val + '" value="SAVE" class="edit" onclick="save_child_row()"/></td>'))
+                .append($('<td><input type="button" id="delete_teach_button' + val + '" value="DELETE" class="delete" onclick="delete_child_row(' + val + ')"/></td>'));
             // pasetinam true or false
             if($(''+newStatusCard+'').text() === "false"){
                 $('#statuscard').prop('checked', false);
