@@ -126,25 +126,32 @@ public class PageControler {
     }
 
 
-    // GET IMG LIST
+    // GET ALL IMG LIST
     @RequestMapping(value = "/getImgList", method = RequestMethod.GET)
     public ResponseEntity<List<ImgModel>> getImgList() throws IOException {
         List<ImgModel> imgModels = pageDataDao.listImgModel();
-
-//        byte[] imgbyte = imgModels.get(0).getImgbyte();
-//        InputStream in = new ByteArrayInputStream(imgbyte);
-//        BufferedImage bImageFromConvert = ImageIO.read(in);
-//        File fileimg = new File("customProject/images/test.jpg");
-//        ImageIO.write(bImageFromConvert, "jpg", fileimg);
-
-        // get BufferedImage
-        BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgModels.get(1).getImgbyte()));
-        // write to file
-        File outputfile = new File("customProject/images/image.jpg").getAbsoluteFile();
-        ImageIO.write(img, "jpg", outputfile);
-
-
         return new ResponseEntity<List<ImgModel>>(imgModels, HttpStatus.OK);
+    }
+
+    // GET CHOSEN TWO IMG LIST
+    @RequestMapping(value = "/getChosenImgList", method = RequestMethod.GET)
+    public ResponseEntity<List<ImgModel>> getChosenImgList() throws IOException {
+        List<ImgModel> imgModels = pageDataDao.chosenImg();
+        return new ResponseEntity<List<ImgModel>>(imgModels, HttpStatus.OK);
+    }
+
+    // UPDATE CHOSEN IMG FROM LIST
+    @RequestMapping(value = "/updateChosenImgFromList", method = RequestMethod.POST)
+    public ResponseEntity<String> updateChosenImgFromList(@RequestParam ("id") int image_id) throws IOException {
+
+        return new ResponseEntity<String>("Pasikeite sekmingai", HttpStatus.OK);
+    }
+
+    // Delete IMG LIST FROM LIST
+    @RequestMapping(value = "/deleteChosenImgFromList", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteChosenImgFromList(@RequestParam ("imgname") String imgname) throws IOException {
+        pageDataDao.deleteImg(imgname);
+        return new ResponseEntity<String>("Issitryne", HttpStatus.OK);
     }
 
     @PersistenceContext

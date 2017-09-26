@@ -11,6 +11,8 @@ public class ImgModel {
     String imgname;
     String imgUrl;
     byte[] imgbyte;
+    @OneToOne
+    ImgChosen imgChosen;
 
     public ImgModel() {
     }
@@ -29,6 +31,13 @@ public class ImgModel {
         this.imgname = imgname;
         this.imgUrl = imgUrl;
         this.imgbyte = imgbyte;
+    }
+
+    public ImgModel(String imgname, String imgUrl, byte[] imgbyte, ImgChosen imgChosen) {
+        this.imgname = imgname;
+        this.imgUrl = imgUrl;
+        this.imgbyte = imgbyte;
+        this.imgChosen = imgChosen;
     }
 
     public int getId() {
@@ -61,5 +70,13 @@ public class ImgModel {
 
     public void setImgbyte(byte[] imgbyte) {
         this.imgbyte = imgbyte;
+    }
+
+    public ImgChosen getImgChosen() {
+        return imgChosen;
+    }
+
+    public void setImgChosen(ImgChosen imgChosen) {
+        this.imgChosen = imgChosen;
     }
 }

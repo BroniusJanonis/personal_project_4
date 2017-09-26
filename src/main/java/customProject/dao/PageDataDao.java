@@ -65,39 +65,20 @@ public class PageDataDao implements IPageDataDao {
     @Override
     public List<ImgModel> listImgModel() throws IOException {
         String sqlImgList = "SELECT imgname, imgbyte FROM images";
-//        List<ImgModel> resultList = entityManager.createNativeQuery(sqlImgList, ImgModel.class).getResultList();
-
         List<ImgModel> list = new ArrayList<>();
-        jdbcTemplate.query(sqlImgList, new ResultSetExtractor<List<ImgModel>>() {
+        List<ImgModel> query = jdbcTemplate.query(sqlImgList, new ResultSetExtractor<List<ImgModel>>() {
             @Override
             public List<ImgModel> extractData(ResultSet resultSet) throws SQLException {
-                while(resultSet.next()){
+                while (resultSet.next()) {
                     ImgModel img = new ImgModel();
                     img.setImgname(resultSet.getString("imgname"));
                     img.setImgbyte(resultSet.getBytes("imgbyte"));
                     list.add(img);
-//                    ResultSet rs = ps.executeQuery();
-//                    if (rs != null) {
-//                        while (rs.next()) {
-//                            // Open the large object for reading
-//                            int oid = rs.getInt(1);
-//                            LargeObject obj = lobj.open(oid, LargeObjectManager.READ);
-//
-//                            // Read the data
-//                            byte buf[] = new byte[obj.size()];
-//                            obj.read(buf, 0, obj.size());
-//                            // Do something with the data read here
-//
-//                            // Close the object
-//                            obj.close();
-//                        }
-//                        rs.close();
-//                    }
                 }
                 return list;
             }
         });
-        return list;
+        return query;
     }
 
     @Override
@@ -110,8 +91,8 @@ public class PageDataDao implements IPageDataDao {
     }
 
     @Override
-    public void updateImg(ImgModel imgModel) {
-        String sqlUpdate = "UPDATE images SET imgname='"+imgModel.getImgname()+"', imgbyte='"+imgModel.getImgbyte()+"' WHERE id="+imgModel.getId();
+    public void updateImg(String image_id) {
+        String sqlUpdate = "UPDATE imgchosen SET image_id='"+image_id+"' WHERE id="+imgModel.getId();
         entityManager.createNativeQuery(sqlUpdate,ImgModel.class).executeUpdate();
     }
 
@@ -119,6 +100,25 @@ public class PageDataDao implements IPageDataDao {
     public void deleteImg(String imgname) {
         String sqlDelete = "DELETE FROM images WHERE imgname='"+imgname+"'";
         entityManager.createNativeQuery(sqlDelete, ImgModel.class).executeUpdate();
+    }
+
+    @Override
+    public List<ImgModel> chosenImg() {
+        String sqlTwoImages = "SELECT images.imgname, images.imgbyte FROM imgchosen INNER JOIN images ON imgchosen.image_id=images.id";
+        List<ImgModel> imgModelList = new ArrayList<>();
+        List<ImgModel> query = jdbcTemplate.query(sqlTwoImages, new ResultSetExtractor<List<ImgModel>>() {
+            @Override
+            public List<ImgModel> extractData(ResultSet resultSet) throws SQLException {
+                while (resultSet.next()) {
+                    ImgModel imgModel = new ImgModel();
+                    imgModel.setImgname(resultSet.getString("imgname"));
+                    imgModel.setImgbyte(resultSet.getBytes("imgbyte"));
+                    imgModelList.add(imgModel);
+                }
+                return imgModelList;
+            }
+        });
+        return query;
     }
 
 }

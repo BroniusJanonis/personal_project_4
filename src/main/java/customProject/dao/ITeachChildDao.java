@@ -1,5 +1,6 @@
 package customProject.dao;
 
+import customProject.model.ImgModel;
 import customProject.model.PageModel;
 import customProject.model.Schoolchild;
 import customProject.model.Teacher;
@@ -22,4 +23,5 @@ public interface ITeachChildDao {
     Schoolchild getChildByNameNSurname(String name, String surname);
     void insertLibrary(Schoolchild schoolchild);
     List<Schoolchild> getActivitiesChildList(String activity);
+
 }

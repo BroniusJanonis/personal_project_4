@@ -15,7 +15,8 @@ public interface IPageDataService {
 
     List<ImgModel> listImgModel() throws IOException;
     void addImg(ImgModel imgModel);
-    void updateImg(ImgModel imgModel);
+    void updateImg(String image_id);
     void deleteImg(String imgname);
+    List<ImgModel> chosenImg();
 
 }

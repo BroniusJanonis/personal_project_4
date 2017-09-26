@@ -25,20 +25,46 @@ adminPage
                 <div></div>
                 <div></div>
                 <p id="newDivInsert" ondblclick="insert_new_div()">Ivesti nauja straipsni (double click me)</p>
-            </div>
+        </div>
             <div id="divright" class="container col-sm-2 text-right">
-                <jsp:include page="imgChangeRightSide.jsp"/>
+                <div id="divimg" class="col sidenav">
+                    <div id="img0" data-toggle="modal" data-target="#myModal" onclick="get_img_from_DB()">
+                        <img id="image0" src="" style="max-width: 100%">
+                    </div>
+                    <div  id="img1" data-toggle="modal" data-target="#myModal" onclick="get_img_from_DB()">
+                        <img id="image1" src="" style="max-width: 100%">
+                    </div>
+                </div>
                 <input id="img" type="text" placeholder="Image Name"/>
                 <input id="imgUrl" type="text" placeholder="Image Url"/>
                 <input type="button" value="INSERT_FROM_URL" onclick="insert_img_from_url()"/>
-<form method="post" action="admin/addImgFromComputerBrowser" modelAttribute="uploadForm">
-                <input type="file" id="fileId" name="fileUpload" size="50"/>
-                <input type="submit" value="Siusti_Pasirinktu_Failus"/>
+<form method="post" action="admin/addImgFromComputerBrowser" enctype="multipart/form-data">
+                <input type="file" id="fileId" name="fileUpload" size="50" multiple/>
+                <input type="submit" value="Siusti_Pasirinktus_Failus"/>
 </form>
-                <input type="button" value="GET_IMG" onclick="get_img_from_DB()"/>
-                <input type="button" value="DELETE_IMG" onclick="delete_img_from_DB()"/>
-                <input type="button" value="TEST" onclick="test_add_existing_file()"/>
-                <img id="img1" src="" />
+                <%--<input type="button" value="TEST" onclick="test_add_existing_file()"/>--%>
+                <%--<img id="img" src="" style="max-width: 100%"/>--%>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Modal Header</h4>
+                            </div>
+                            <div id="modalData" class="modal-body">
+                                <p>Some text in the modal.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="button_modal_close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
             </div>
         </div>
     </div>
@@ -402,7 +428,8 @@ adminPage
 </script>
 <%--Page Data--%>
 <script>
-    window.onload = function construct_mid_div() {
+    window.onload = function() {
+        // get <div>'s from DB
         $.get("/admin/",
             function (pagedata, status) {
                 // pakuriam divEilutes pagal elementu listo ilgi
@@ -422,6 +449,13 @@ adminPage
                     if((i+1)%3 == 0){rowId=rowId+1}
                 });
             });
+        // get <img> from DB and add to img1 and img2
+        $.get("/admin/getChosenImgList",
+            function (twoImages, status) {
+                $("#image0").attr("src", "data:image/png;base64," + twoImages[0].imgbyte);
+                $("#image1").attr("src", "data:image/png;base64," + twoImages[1].imgbyte);
+            }
+        )
     };
 </script>
 <script>
@@ -497,27 +531,57 @@ adminPage
 <script>
     function get_img_from_DB() {
         $.get("/admin/getImgList",
-            function (data) {
-                alert(data[1].imgname);
-                alert(data[1].imgbyte);
-                document.getElementById("img1").src = "data:image/png;base64," + data[1].imgbyte;
-            }
-        )
+            function (imgdata) {
+                for(a=0; a < (imgdata.length)/3; a++){
+                    var tablerowmodal = $('<div id="divmodal'+a+'" class="col-md-12"/>').appendTo($('#modalData'));
+                }
+                var rowId = 0;
+                $(imgdata).each(function(i,imgdt){
+                    // naudojam console tikrinti lista, kad nemestum alertu (nesiukslintum)
+                    // console.log(i+'   '+pd.id);
+                    $('<div id="divmod'+i+'" class="col-md-4"/>').appendTo($('#divmodal'+rowId))
+                        .append($('<input id="idmod'+i+'" type="hidden"/>').text(imgdt.id))
+                        .append($('<td id="namemod'+i+'"/>').text(imgdt.imgname))
+                        .append($('<img id="img'+i+'" src="data:image/png;base64,'+imgdt.imgbyte+'" style="max-width: 100%"/>'))
+                        .append($('<input type="button" id="update_img_button" value="UPDATE" class="add" onclick="update_img_from_DB('+imgdt.id+')"/>'))
+                        .append($('<input type="button" id="delete_img_button" value="DELETE" class="add" onclick="delete_img_from_DB('+imgdt.imgname+')"/>'));
+                    if((i+1)%3 == 0){rowId=rowId+1}
+                });
+//                document.getElementById("img1").src = "data:image/png;base64," + imgdata[1].imgbyte;
+                }
+            );
     }
 </script>
 <script>
-    function delete_img_from_DB() {
-
-    }
-</script>
-<script>
-    function test_add_existing_file() {
-        $.post("/admin/test1",
-        function (data, status) {
+    function update_img_from_DB(val) {
+        $.post("/admin/updateChosenImgFromList?id="+val,
+        function (status) {
             alert(status);
-            alert(data.imgbyte);
-            document.getElementById("img1").src = "data:image/png;base64," + data.imgbyte;
         })
     }
 </script>
+<script>
+    function delete_img_from_DB(val) {
+        $.post("/admin/deleteChosenImgFromList?img="+val,
+        function (status) {
+            alert(status);
+        })
+    }
+</script>
+<%--Cleaning the Modal--%>
+<script>
+        $("#button_modal_close").click(function () {
+            $(".modal-body").html("Cleared Data")
+        });
+</script>
+<%--<script>--%>
+    <%--function test_add_existing_file() {--%>
+        <%--$.post("/admin/test1",--%>
+        <%--function (data, status) {--%>
+            <%--alert(status);--%>
+            <%--alert(data.imgbyte);--%>
+            <%--document.getElementById("img").src = "data:image/png;base64," + data.imgbyte;--%>
+        <%--})--%>
+    <%--}--%>
+<%--</script>--%>
 </html>

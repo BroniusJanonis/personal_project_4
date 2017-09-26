@@ -1,5 +1,6 @@
 package customProject.dao;
 
+import customProject.model.ImgModel;
 import customProject.model.LibraryCard;
 import customProject.model.Schoolchild;
 import customProject.model.Teacher;

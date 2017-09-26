@@ -17,6 +17,7 @@ public interface IPageDataDao {
 
     List<ImgModel> listImgModel() throws IOException;
     void addImg(ImgModel imgModel) throws IOException, SQLException;
-    void updateImg(ImgModel imgModel);
+    void updateImg(String image_id);
     void deleteImg(String imgname);
+    List<ImgModel> chosenImg();
 }

@@ -44,13 +44,18 @@ public class PageDataService implements IPageDataService {
     }
 
     @Override
-    public void updateImg(ImgModel imgModel) {
+    public void updateImg(String image_id) {
 
     }
 
     @Override
     public void deleteImg(String imgname) {
 
+    }
+
+    @Override
+    public List<ImgModel> chosenImg() {
+        return pageDataDao.chosenImg();
     }
 
 }
