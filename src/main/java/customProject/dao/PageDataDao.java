@@ -111,12 +111,14 @@ public class PageDataDao implements IPageDataDao {
 
     @Override
     public void updateImg(ImgModel imgModel) {
-
+        String sqlUpdate = "UPDATE images SET imgname='"+imgModel.getImgname()+"', imgbyte='"+imgModel.getImgbyte()+"' WHERE id="+imgModel.getId();
+        entityManager.createNativeQuery(sqlUpdate,ImgModel.class).executeUpdate();
     }
 
     @Override
     public void deleteImg(String imgname) {
-
+        String sqlDelete = "DELETE FROM images WHERE imgname='"+imgname+"'";
+        entityManager.createNativeQuery(sqlDelete, ImgModel.class).executeUpdate();
     }
 
 }
