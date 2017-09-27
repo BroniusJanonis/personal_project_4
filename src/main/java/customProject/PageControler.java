@@ -102,12 +102,13 @@ public class PageControler {
 
     // ADD IMG FROM COMPUTER BROWSER
     @RequestMapping(value = "/addImgFromComputerBrowser", method = RequestMethod.POST)
+    @ResponseBody
     public String addImgFromComputerBrowser(@RequestParam("fileUpload") MultipartFile fileUpload[]) throws IOException, SQLException {
         if (fileUpload != null && fileUpload.length > 0) {
             Arrays.stream(fileUpload).forEach(s ->{
                 try{
                     byte[] imageInByte;
-                    BufferedImage originalImage = ImageIO.read((File) s);
+                    BufferedImage originalImage = ImageIO.read(s.getInputStream());
                     // convert BufferedImage to byte array
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     ImageIO.write(originalImage, "jpg", baos);
@@ -115,7 +116,7 @@ public class PageControler {
                     imageInByte = baos.toByteArray();
                     baos.close();
 
-                    ImgModel img = new ImgModel(s.getName(),imageInByte);
+                    ImgModel img = new ImgModel(s.getOriginalFilename(),imageInByte);
                     pageDataDao.addImg(img);
                 } catch (Exception e){
                     System.out.println("Klaida pridedant failu masyva is compiuterio: " + e);
@@ -142,14 +143,15 @@ public class PageControler {
 
     // UPDATE CHOSEN IMG FROM LIST
     @RequestMapping(value = "/updateChosenImgFromList", method = RequestMethod.POST)
-    public ResponseEntity<String> updateChosenImgFromList(@RequestParam ("id") int image_id) throws IOException {
-
+    public ResponseEntity<String> updateChosenImgFromList(@RequestParam ("id") int image_id,
+                                                          @RequestParam("imagename") String imagename) throws IOException {
+        pageDataDao.updateImg(image_id, imagename);
         return new ResponseEntity<String>("Pasikeite sekmingai", HttpStatus.OK);
     }
 
     // Delete IMG LIST FROM LIST
     @RequestMapping(value = "/deleteChosenImgFromList", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteChosenImgFromList(@RequestParam ("imgname") String imgname) throws IOException {
+    public ResponseEntity<String> deleteChosenImgFromList(@RequestParam ("img") String imgname) throws IOException {
         pageDataDao.deleteImg(imgname);
         return new ResponseEntity<String>("Issitryne", HttpStatus.OK);
     }

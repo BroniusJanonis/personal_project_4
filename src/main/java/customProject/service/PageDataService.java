@@ -44,7 +44,7 @@ public class PageDataService implements IPageDataService {
     }
 
     @Override
-    public void updateImg(String image_id) {
+    public void updateImg(int image_id, String imagename) {
 
     }
 

@@ -64,13 +64,14 @@ public class PageDataDao implements IPageDataDao {
 
     @Override
     public List<ImgModel> listImgModel() throws IOException {
-        String sqlImgList = "SELECT imgname, imgbyte FROM images";
+        String sqlImgList = "SELECT id, imgname, imgbyte FROM images";
         List<ImgModel> list = new ArrayList<>();
         List<ImgModel> query = jdbcTemplate.query(sqlImgList, new ResultSetExtractor<List<ImgModel>>() {
             @Override
             public List<ImgModel> extractData(ResultSet resultSet) throws SQLException {
                 while (resultSet.next()) {
                     ImgModel img = new ImgModel();
+                    img.setId(resultSet.getInt("id"));
                     img.setImgname(resultSet.getString("imgname"));
                     img.setImgbyte(resultSet.getBytes("imgbyte"));
                     list.add(img);
@@ -91,8 +92,8 @@ public class PageDataDao implements IPageDataDao {
     }
 
     @Override
-    public void updateImg(String image_id) {
-        String sqlUpdate = "UPDATE imgchosen SET image_id='"+image_id+"' WHERE id="+imgModel.getId();
+    public void updateImg(int image_id, String imagename) {
+        String sqlUpdate = "UPDATE imgchosen SET image_id='"+image_id+"' WHERE imagename='"+imagename+"'";
         entityManager.createNativeQuery(sqlUpdate,ImgModel.class).executeUpdate();
     }
 

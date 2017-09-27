@@ -28,10 +28,12 @@ adminPage
         </div>
             <div id="divright" class="container col-sm-2 text-right">
                 <div id="divimg" class="col sidenav">
-                    <div id="img0" data-toggle="modal" data-target="#myModal" onclick="get_img_from_DB()">
+                    <div id="img0" data-toggle="modal" data-target="#myModal" onclick="get_img_from_DB('firstImage')">
+                        <input id="firstImage" value="firstImage" type="hidden">
                         <img id="image0" src="" style="max-width: 100%">
                     </div>
-                    <div  id="img1" data-toggle="modal" data-target="#myModal" onclick="get_img_from_DB()">
+                    <div  id="img1" data-toggle="modal" data-target="#myModal" onclick="get_img_from_DB('secondImage')">
+                        <input id="secondImage" value="secondImage" type="hidden">
                         <img id="image1" src="" style="max-width: 100%">
                     </div>
                 </div>
@@ -51,7 +53,7 @@ adminPage
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <button id="button_modal_symbol_x" type="button" class="close" data-dismiss="modal">&times;</button>
                                 <h4 class="modal-title">Modal Header</h4>
                             </div>
                             <div id="modalData" class="modal-body">
@@ -529,7 +531,7 @@ adminPage
     }
 </script>
 <script>
-    function get_img_from_DB() {
+    function get_img_from_DB(val) {
         $.get("/admin/getImgList",
             function (imgdata) {
                 for(a=0; a < (imgdata.length)/3; a++){
@@ -543,8 +545,8 @@ adminPage
                         .append($('<input id="idmod'+i+'" type="hidden"/>').text(imgdt.id))
                         .append($('<td id="namemod'+i+'"/>').text(imgdt.imgname))
                         .append($('<img id="img'+i+'" src="data:image/png;base64,'+imgdt.imgbyte+'" style="max-width: 100%"/>'))
-                        .append($('<input type="button" id="update_img_button" value="UPDATE" class="add" onclick="update_img_from_DB('+imgdt.id+')"/>'))
-                        .append($('<input type="button" id="delete_img_button" value="DELETE" class="add" onclick="delete_img_from_DB('+imgdt.imgname+')"/>'));
+                        .append($('<input type="button" id="update_img_button" value="UPDATE" class="add" onclick="update_img_from_DB('+i+','+val+')"/>'))
+                        .append($('<input type="button" id="delete_img_button" value="DELETE" class="add" onclick="delete_img_from_DB('+i+')"/>'));
                     if((i+1)%3 == 0){rowId=rowId+1}
                 });
 //                document.getElementById("img1").src = "data:image/png;base64," + imgdata[1].imgbyte;
@@ -553,16 +555,16 @@ adminPage
     }
 </script>
 <script>
-    function update_img_from_DB(val) {
-        $.post("/admin/updateChosenImgFromList?id="+val,
+    function update_img_from_DB(i, val) {
+        $.post("/admin/updateChosenImgFromList?id="+$("#idmod"+i).text()+"&imagename="+val.value,
         function (status) {
             alert(status);
-        })
+        });
     }
 </script>
 <script>
-    function delete_img_from_DB(val) {
-        $.post("/admin/deleteChosenImgFromList?img="+val,
+    function delete_img_from_DB(no) {
+        $.post("/admin/deleteChosenImgFromList?img="+$("#namemod"+no).text(),
         function (status) {
             alert(status);
         })
@@ -570,7 +572,7 @@ adminPage
 </script>
 <%--Cleaning the Modal--%>
 <script>
-        $("#button_modal_close").click(function () {
+        $("#button_modal_close, #button_modal_symbol_x").click(function () {
             $(".modal-body").html("Cleared Data")
         });
 </script>
