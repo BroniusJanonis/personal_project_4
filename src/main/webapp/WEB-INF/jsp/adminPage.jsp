@@ -30,11 +30,11 @@ adminPage
                 <div id="divimg" class="col sidenav">
                     <div id="img0" data-toggle="modal" data-target="#myModal" onclick="get_img_from_DB('firstImage')">
                         <input id="firstImage" value="firstImage" type="hidden">
-                        <img id="image0" src="" style="max-width: 100%">
+                        <img id="image0" src="" style="max-width: 100%; margin: 20px">
                     </div>
                     <div  id="img1" data-toggle="modal" data-target="#myModal" onclick="get_img_from_DB('secondImage')">
                         <input id="secondImage" value="secondImage" type="hidden">
-                        <img id="image1" src="" style="max-width: 100%">
+                        <img id="image1" src="" style="max-width: 100%; margin: 20px">
                     </div>
                 </div>
                 <input id="img" type="text" placeholder="Image Name"/>
@@ -430,7 +430,7 @@ adminPage
 </script>
 <%--Page Data--%>
 <script>
-    window.onload = function() {
+    window.onload = function page_data() {
         // get <div>'s from DB
         $.get("/admin/",
             function (pagedata, status) {
@@ -541,12 +541,10 @@ adminPage
                 $(imgdata).each(function(i,imgdt){
                     // naudojam console tikrinti lista, kad nemestum alertu (nesiukslintum)
                     // console.log(i+'   '+pd.id);
-                    $('<div id="divmod'+i+'" class="col-md-4"/>').appendTo($('#divmodal'+rowId))
+                    $('<div id="divmod'+i+'" class="col-md-4" onmouseenter="delete_appear('+i+')" onmouseleave="delete_disappear()"/>').appendTo($('#divmodal'+rowId))
                         .append($('<input id="idmod'+i+'" type="hidden"/>').text(imgdt.id))
                         .append($('<td id="namemod'+i+'"/>').text(imgdt.imgname))
-                        .append($('<img id="img'+i+'" src="data:image/png;base64,'+imgdt.imgbyte+'" style="max-width: 100%"/>'))
-                        .append($('<input type="button" id="update_img_button" value="UPDATE" class="add" onclick="update_img_from_DB('+i+','+val+')"/>'))
-                        .append($('<input type="button" id="delete_img_button" value="DELETE" class="add" onclick="delete_img_from_DB('+i+')"/>'));
+                        .append($('<img id="img'+i+'" src="data:image/png;base64,'+imgdt.imgbyte+'" style="max-width: 100%"  onclick="update_img_from_DB('+i+','+val+')"/>'));
                     if((i+1)%3 == 0){rowId=rowId+1}
                 });
 //                document.getElementById("img1").src = "data:image/png;base64," + imgdata[1].imgbyte;
@@ -555,11 +553,21 @@ adminPage
     }
 </script>
 <script>
+    function delete_appear(val) {
+    $('<input type="button" id="delete_img_button" value="DELETE" class="delete" onclick="delete_img_from_DB('+val+')"/>').appendTo($("#divmod"+val));
+    }
+    function delete_disappear(val) {
+        $("#delete_img_button").remove();
+    }
+
+</script>
+<script>
     function update_img_from_DB(i, val) {
         $.post("/admin/updateChosenImgFromList?id="+$("#idmod"+i).text()+"&imagename="+val.value,
         function (status) {
             alert(status);
         });
+        location.reload();
     }
 </script>
 <script>
@@ -567,6 +575,7 @@ adminPage
         $.post("/admin/deleteChosenImgFromList?img="+$("#namemod"+no).text(),
         function (status) {
             alert(status);
+            $(".modal").load();
         })
     }
 </script>
