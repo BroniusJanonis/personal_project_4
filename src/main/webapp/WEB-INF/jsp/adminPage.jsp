@@ -40,9 +40,9 @@ adminPage
                 <input id="img" type="text" placeholder="Image Name"/>
                 <input id="imgUrl" type="text" placeholder="Image Url"/>
                 <input type="button" value="INSERT_FROM_URL" onclick="insert_img_from_url()"/>
-<form method="post" action="admin/addImgFromComputerBrowser" enctype="multipart/form-data">
+<form id="form1" method="post" action="admin/addImgFromComputerBrowser" enctype="multipart/form-data">
                 <input type="file" id="fileId" name="fileUpload" size="50" multiple/>
-                <input type="submit" value="Siusti_Pasirinktus_Failus"/>
+                <input id="buttonSendFilesFromComputer" type="submit" value="Siusti_Pasirinktus_Failus"/>
 </form>
                 <%--<input type="button" value="TEST" onclick="test_add_existing_file()"/>--%>
                 <%--<img id="img" src="" style="max-width: 100%"/>--%>
@@ -588,6 +588,21 @@ adminPage
         $("#button_modal_close, #button_modal_symbol_x").click(function () {
             $(".modal-body").html("Cleared Data")
         });
+</script>
+<%--NEVEIKIA ON CLICK SEND FILE THROUGH JQUERY--%>
+<script>
+    $("#buttonSendFilesFromComputer").click(function () {
+        $('#form1').submit( function( e ) {
+                $.ajax( {
+                    url: "addImgFromComputerBrowser",
+                    type: "POST",
+                    data: new FormData( this ),
+                    processData: false,
+                    contentType: false
+                } );
+                e.preventDefault();
+            } );
+    });
 </script>
 <%--<script>--%>
     <%--function test_add_existing_file() {--%>
