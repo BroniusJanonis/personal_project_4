@@ -105,7 +105,8 @@ public class PageDataDao implements IPageDataDao {
 
     @Override
     public List<ImgModel> chosenImg() {
-        String sqlTwoImages = "SELECT images.imgname, images.imgbyte FROM imgchosen INNER JOIN images ON imgchosen.image_id=images.id";
+        String sqlTwoImages = "SELECT images.imgname, images.imgbyte FROM imgchosen INNER JOIN images ON imgchosen.image_id=images.id ORDER BY imgchosen.id";
+        // SELECT images.imgname, images.imgbyte FROM imgchosen INNER JOIN images ON imgchosen.image_id=images.id ORDER BY imgchosen.id
         List<ImgModel> imgModelList = new ArrayList<>();
         List<ImgModel> query = jdbcTemplate.query(sqlTwoImages, new ResultSetExtractor<List<ImgModel>>() {
             @Override

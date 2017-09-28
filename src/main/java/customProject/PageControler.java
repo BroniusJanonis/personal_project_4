@@ -102,7 +102,6 @@ public class PageControler {
 
     // ADD IMG FROM COMPUTER BROWSER
     @RequestMapping(value = "/addImgFromComputerBrowser", method = RequestMethod.POST)
-    @ResponseBody
     public String addImgFromComputerBrowser(@RequestParam("fileUpload") MultipartFile fileUpload[]) throws IOException, SQLException {
         if (fileUpload != null && fileUpload.length > 0) {
             Arrays.stream(fileUpload).forEach(s ->{
@@ -123,7 +122,7 @@ public class PageControler {
                 }
             });
         }
-        return "Isirase is Computer Browser sekmingai";
+        return "redirect:/redirectwindow?address=adminPage";
     }
 
 

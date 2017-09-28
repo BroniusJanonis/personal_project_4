@@ -554,7 +554,7 @@ adminPage
 </script>
 <script>
     function delete_appear(val) {
-    $('<input type="button" id="delete_img_button" value="DELETE" class="delete" onclick="delete_img_from_DB('+val+')"/>').appendTo($("#divmod"+val));
+    $('<input type="button" id="delete_img_button" value="DELETE" class="delete" onclick="delete_img_from_DB('+val+'); window.location.reload()"/>').appendTo($("#divmod"+val));
     }
     function delete_disappear(val) {
         $("#delete_img_button").remove();
@@ -563,7 +563,7 @@ adminPage
 </script>
 <script>
     function update_img_from_DB(i, val) {
-        $.post("/admin/updateChosenImgFromList?id="+$("#idmod"+i).text()+"&imagename="+val.value,
+            $.post("/admin/updateChosenImgFromList?id="+$("#idmod"+i).text()+"&imagename="+val.value,
         function (status) {
             alert(status);
         });
@@ -575,8 +575,12 @@ adminPage
         $.post("/admin/deleteChosenImgFromList?img="+$("#namemod"+no).text(),
         function (status) {
             alert(status);
-            $(".modal").load();
-        })
+            // neveikia
+//            $(".modal").load();
+            // neveikia
+//            $('#myModal').on('hidden', function () {
+//                document.location.reload();
+            })
     }
 </script>
 <%--Cleaning the Modal--%>
