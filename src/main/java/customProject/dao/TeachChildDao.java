@@ -1,9 +1,6 @@
 package customProject.dao;
 
-import customProject.model.ImgModel;
-import customProject.model.LibraryCard;
-import customProject.model.Schoolchild;
-import customProject.model.Teacher;
+import customProject.model.*;
 import org.hibernate.FlushMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -46,9 +43,15 @@ public class TeachChildDao implements ITeachChildDao {
                 tempschoolchild.setId(libraryCard.getSchoolchild().getId());
                 LibraryCard libraryCard1 = new LibraryCard(libraryCard.getName(), libraryCard.getExpiredDate(), libraryCard.isStatus(), tempschoolchild);
                 libraryCard1.setId(libraryCard.getId());
-                    Schoolchild schoolchild1 = new Schoolchild(schoolchild.getName(), schoolchild.getSurname(), schoolchild.getParentinfo(), schoolchild.getEmail(), schoolchild.getAddress(), teacher1, libraryCard1);
-                    schoolchild1.setId(schoolchild.getId());
-                    schoolchildList.add(schoolchild1);
+                    List<Activities> activitiesList = new ArrayList<>();
+                    for(Activities activ: schoolchild.getActivities()){
+                        Activities activities = new Activities(activ.getName());
+                        activities.setId(activ.getId());
+                        activitiesList.add(activities);
+                    }
+                        Schoolchild schoolchild1 = new Schoolchild(schoolchild.getName(), schoolchild.getSurname(), schoolchild.getPassword(), schoolchild.getParentinfo(), schoolchild.getEmail(), schoolchild.getAddress(), teacher1, libraryCard1, activitiesList);
+                        schoolchild1.setId(schoolchild.getId());
+                        schoolchildList.add(schoolchild1);
         }
         return schoolchildList;
     }

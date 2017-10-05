@@ -3,6 +3,7 @@ package customProject;
 import customProject.dao.IPageDataDao;
 import customProject.model.ImgModel;
 import customProject.model.PageModel;
+import customProject.model.Schoolchild;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -209,8 +210,6 @@ public class PageControler {
 
         return imgModel1;
     }
-
-
 
     // UPDATE/CHANGE IMG
     // DELETE IMG

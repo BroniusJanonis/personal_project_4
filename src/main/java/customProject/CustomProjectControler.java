@@ -196,4 +196,47 @@ public class CustomProjectControler {
         return model;
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/usersForCrudProject",method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<Schoolchild> testChildList(@ModelAttribute Schoolchild schoolchild){
+        List<Schoolchild> schoolchildlist = teachChildDao.schoolchildlist();
+        return schoolchildlist;
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/getChildById",method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public Schoolchild getChildById(@RequestParam("id") int id){
+        Schoolchild childById = teachChildDao.getChildById(id);
+        return childById;
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/addchildfromAngular", method = RequestMethod.POST)
+    public String addchildfromAngular(@RequestBody Schoolchild schoolchild, @RequestParam ("teacher_id") int teacher_id){
+        Teacher teacher = new Teacher();
+        teacher.setId(teacher_id);
+        LibraryCard libraryCard = new LibraryCard(schoolchild.getLibraryCard().getName(), schoolchild.getLibraryCard().getExpiredDate(), schoolchild.getLibraryCard().isStatus());
+        Schoolchild child = new Schoolchild(schoolchild.getName(),schoolchild.getSurname(),schoolchild.getParentinfo(),schoolchild.getEmail(),schoolchild.getAddress(), teacher, libraryCard);
+        teachChildDao.insertChild(child);
+        teachChildDao.insertLibrary(child);
+        return "adminPage";
+    }
+
+    @RequestMapping(value = "/updatechilfromAnguldar", method = RequestMethod.POST)
+    @ResponseBody
+    public void updatechilfromAnguldar(@RequestBody Schoolchild schoolchild, @RequestParam ("teacher_id") int teacher_id
+            ,@RequestParam ("id") int id, @RequestParam ("idcard") int idcard){
+        Teacher teacher = new Teacher();
+        teacher.setId(teacher_id);
+        LibraryCard library= new LibraryCard(schoolchild.getLibraryCard().getName(), schoolchild.getLibraryCard().getExpiredDate(), schoolchild.getLibraryCard().isStatus());
+        library.setId(idcard);
+        Schoolchild child = new Schoolchild(schoolchild.getName(),schoolchild.getSurname(),schoolchild.getParentinfo(),schoolchild.getEmail(),schoolchild.getAddress(), teacher, library);
+        child.setId(id);
+        teachChildDao.updateChild(child);
+    }
+
+
 }

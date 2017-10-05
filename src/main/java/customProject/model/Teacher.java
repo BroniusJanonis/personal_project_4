@@ -11,6 +11,7 @@ public class Teacher {
     int id;
     String name;
     String surname;
+    String password;
     long phone;
     String info;
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "teacher")
@@ -29,6 +30,15 @@ public class Teacher {
     public Teacher(String name, String surname, long phone, String info, List<Schoolchild> schoolchild) {
         this.name = name;
         this.surname = surname;
+        this.phone = phone;
+        this.info = info;
+        this.schoolchild = schoolchild;
+    }
+
+    public Teacher(String name, String surname, String password, long phone, String info, List<Schoolchild> schoolchild) {
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
         this.phone = phone;
         this.info = info;
         this.schoolchild = schoolchild;
@@ -86,7 +96,14 @@ public class Teacher {
         this.schoolchild = schoolchild;
     }
 
-//    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    //    @Override
 //    public String toString() {
 //        return "Teacher{" +
 //                "id=" + id +

@@ -559,7 +559,6 @@ adminPage
     function delete_disappear(val) {
         $("#delete_img_button").remove();
     }
-
 </script>
 <script>
     function update_img_from_DB(i, val) {
@@ -588,22 +587,25 @@ adminPage
         $("#button_modal_close, #button_modal_symbol_x").click(function () {
             $(".modal-body").html("Cleared Data")
         });
+        $('#myModal').on('hidden.bs.modal', function () {
+            $(".modal-body").html("Cleared Data")
+        });
 </script>
 <%--NEVEIKIA ON CLICK SEND FILE THROUGH JQUERY--%>
-<script>
-    $("#buttonSendFilesFromComputer").click(function () {
-        $('#form1').submit( function( e ) {
-                $.ajax( {
-                    url: "addImgFromComputerBrowser",
-                    type: "POST",
-                    data: new FormData( this ),
-                    processData: false,
-                    contentType: false
-                } );
-                e.preventDefault();
-            } );
-    });
-</script>
+<%--<script>--%>
+    <%--$("#buttonSendFilesFromComputer").click(function () {--%>
+        <%--$('#form1').submit( function( e ) {--%>
+                <%--$.ajax( {--%>
+                    <%--url: "addImgFromComputerBrowser",--%>
+                    <%--type: "POST",--%>
+                    <%--data: new FormData( this ),--%>
+                    <%--processData: false,--%>
+                    <%--contentType: false--%>
+                <%--} );--%>
+                <%--e.preventDefault();--%>
+            <%--} );--%>
+    <%--});--%>
+<%--</script>--%>
 <%--<script>--%>
     <%--function test_add_existing_file() {--%>
         <%--$.post("/admin/test1",--%>
