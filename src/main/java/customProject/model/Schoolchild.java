@@ -11,7 +11,6 @@ public class Schoolchild {
     int id;
     String name;
     String surname;
-    String password;
     String parentinfo;
     String email;
     String address;
@@ -62,18 +61,6 @@ public class Schoolchild {
     public Schoolchild(String name, String surname, String parentinfo, String email, String address, Teacher teacher, LibraryCard libraryCard, List<Activities> activities) {
         this.name = name;
         this.surname = surname;
-        this.parentinfo = parentinfo;
-        this.email = email;
-        this.address = address;
-        this.teacher = teacher;
-        this.libraryCard = libraryCard;
-        this.activities = activities;
-    }
-
-    public Schoolchild(String name, String surname, String password, String parentinfo, String email, String address, Teacher teacher, LibraryCard libraryCard, List<Activities> activities) {
-        this.name = name;
-        this.surname = surname;
-        this.password = password;
         this.parentinfo = parentinfo;
         this.email = email;
         this.address = address;
@@ -154,13 +141,6 @@ public class Schoolchild {
         this.activities = activities;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
     //    @Override
 //    public String toString() {
 //        return "Schoolchild{" +

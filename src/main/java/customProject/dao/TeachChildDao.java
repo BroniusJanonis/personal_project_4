@@ -49,7 +49,7 @@ public class TeachChildDao implements ITeachChildDao {
                         activities.setId(activ.getId());
                         activitiesList.add(activities);
                     }
-                        Schoolchild schoolchild1 = new Schoolchild(schoolchild.getName(), schoolchild.getSurname(), schoolchild.getPassword(), schoolchild.getParentinfo(), schoolchild.getEmail(), schoolchild.getAddress(), teacher1, libraryCard1, activitiesList);
+                        Schoolchild schoolchild1 = new Schoolchild(schoolchild.getName(), schoolchild.getSurname(), schoolchild.getParentinfo(), schoolchild.getEmail(), schoolchild.getAddress(), teacher1, libraryCard1, activitiesList);
                         schoolchild1.setId(schoolchild.getId());
                         schoolchildList.add(schoolchild1);
         }
