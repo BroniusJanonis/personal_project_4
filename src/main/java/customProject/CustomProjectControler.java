@@ -196,46 +196,69 @@ public class CustomProjectControler {
         return model;
     }
 
+
+    // GET CHILD LIST FOR ANGULAR 4
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/usersForCrudProject",method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public List<Schoolchild> testChildList(@ModelAttribute Schoolchild schoolchild){
+        List<Schoolchild> parsedSchoolchild = new ArrayList<>();
         List<Schoolchild> schoolchildlist = teachChildDao.schoolchildlist();
-        return schoolchildlist;
+        for(Schoolchild list: schoolchildlist){
+            Schoolchild parsedchild = new Schoolchild(list.getName(), list.getSurname(), list.getParentinfo());
+            parsedchild.setId(list.getId());
+            parsedSchoolchild.add(parsedchild);
+        }
+        return parsedSchoolchild;
     }
 
-
+    // GET CHILD BY ID FOR ANGULAR 4
     @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "/getChildById",method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/getChildById/{id}",method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Schoolchild getChildById(@RequestParam("id") int id){
+    // per Path parametrus eprsiduodam (cia vietoj klaustuko eina ":"
+    public Schoolchild getChildById(@PathVariable ("id") int id){
         Schoolchild childById = teachChildDao.getChildById(id);
-        return childById;
+        Schoolchild parsedChild = new Schoolchild(childById.getName(), childById.getSurname(), childById.getParentinfo());
+        parsedChild.setId(childById.getId());
+        return parsedChild;
     }
 
+    // DELETE CHILD BY ID FOR ANGULAR 4
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/deleteChildById/{id}",method = RequestMethod.DELETE, produces = "application/json")
+    @ResponseBody
+    // per Path parametrus eprsiduodam (cia vietoj klaustuko eina ":"
+    public void deleteChildById(@PathVariable ("id") int id){
+        teachChildDao.deleteChild(id);
+    }
+
+    // ADD CHILD FOR ANGULAR 4
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/addchildfromAngular", method = RequestMethod.POST)
-    public String addchildfromAngular(@RequestBody Schoolchild schoolchild, @RequestParam ("teacher_id") int teacher_id){
+    @ResponseBody
+    public ResponseEntity<Schoolchild> addchildfromAngular(@RequestBody Schoolchild schoolchild){
+        schoolchild.setEmail("");
+        schoolchild.setAddress("");
         Teacher teacher = new Teacher();
-        teacher.setId(teacher_id);
-        LibraryCard libraryCard = new LibraryCard(schoolchild.getLibraryCard().getName(), schoolchild.getLibraryCard().getExpiredDate(), schoolchild.getLibraryCard().isStatus());
-        Schoolchild child = new Schoolchild(schoolchild.getName(),schoolchild.getSurname(),schoolchild.getParentinfo(),schoolchild.getEmail(),schoolchild.getAddress(), teacher, libraryCard);
-        teachChildDao.insertChild(child);
-        teachChildDao.insertLibrary(child);
-        return "adminPage";
+        teacher.setId(1);
+        schoolchild.setTeacher(teacher);
+        teachChildDao.insertChild(schoolchild);
+        return new ResponseEntity<Schoolchild>(schoolchild, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/updatechilfromAnguldar", method = RequestMethod.POST)
+    // UPDATE CHILD FOR ANGULAR 4
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/updatechilfromAnguldar/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public void updatechilfromAnguldar(@RequestBody Schoolchild schoolchild, @RequestParam ("teacher_id") int teacher_id
-            ,@RequestParam ("id") int id, @RequestParam ("idcard") int idcard){
+    // reikia ir body, ir id gauti, nes konstruktorius be id pas mus (generuojamas auto irasymo budu)
+    public void updatechilfromAnguldar(@RequestBody Schoolchild schoolchild, @PathVariable ("id") int id){
+        schoolchild.setEmail("test");
+        schoolchild.setAddress("test");
         Teacher teacher = new Teacher();
-        teacher.setId(teacher_id);
-        LibraryCard library= new LibraryCard(schoolchild.getLibraryCard().getName(), schoolchild.getLibraryCard().getExpiredDate(), schoolchild.getLibraryCard().isStatus());
-        library.setId(idcard);
-        Schoolchild child = new Schoolchild(schoolchild.getName(),schoolchild.getSurname(),schoolchild.getParentinfo(),schoolchild.getEmail(),schoolchild.getAddress(), teacher, library);
-        child.setId(id);
-        teachChildDao.updateChild(child);
+        teacher.setId(id);
+        schoolchild.setTeacher(teacher);
+        teachChildDao.updateChild(schoolchild);
     }
 
 

@@ -100,7 +100,7 @@ public class TeachChildDao implements ITeachChildDao {
         nativeQuery.setParameter(5, schoolchild.getAddress());
         nativeQuery.setParameter(6, schoolchild.getTeacher().getId());
         nativeQuery.executeUpdate();
-        nativeQuery.setFlushMode(FlushModeType.COMMIT);
+//        nativeQuery.setFlushMode(FlushModeType.COMMIT);
     }
 
     @Override

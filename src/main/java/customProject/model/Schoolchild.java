@@ -31,6 +31,12 @@ public class Schoolchild {
         this.surname = surname;
     }
 
+    public Schoolchild(String name, String surname, String parentinfo) {
+        this.name = name;
+        this.surname = surname;
+        this.parentinfo = parentinfo;
+    }
+
     public Schoolchild(String name, String surname, String parentinfo, String email, String address) {
         this.name = name;
         this.surname = surname;
