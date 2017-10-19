@@ -27,6 +27,7 @@ public class TeachChildDao implements ITeachChildDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    // Desra, kuria pertvarkysiu, kolkas palikau, kad veiktu
     @Override
     public List<Schoolchild> schoolchildlist() {
 
@@ -38,24 +39,25 @@ public class TeachChildDao implements ITeachChildDao {
             Teacher teacher = schoolchild.getTeacher();
             Teacher teacher1 = new Teacher(teacher.getName(), teacher.getSurname(), teacher.getPhone(), teacher.getInfo());
             teacher1.setId(teacher.getId());
-                LibraryCard libraryCard = schoolchild.getLibraryCard();
-                Schoolchild tempschoolchild = new Schoolchild();
-                tempschoolchild.setId(libraryCard.getSchoolchild().getId());
-                LibraryCard libraryCard1 = new LibraryCard(libraryCard.getName(), libraryCard.getExpiredDate(), libraryCard.isStatus(), tempschoolchild);
-                libraryCard1.setId(libraryCard.getId());
-                    List<Activities> activitiesList = new ArrayList<>();
-                    for(Activities activ: schoolchild.getActivities()){
-                        Activities activities = new Activities(activ.getName());
-                        activities.setId(activ.getId());
-                        activitiesList.add(activities);
-                    }
-                        Schoolchild schoolchild1 = new Schoolchild(schoolchild.getName(), schoolchild.getSurname(), schoolchild.getParentinfo(), schoolchild.getEmail(), schoolchild.getAddress(), teacher1, libraryCard1, activitiesList);
-                        schoolchild1.setId(schoolchild.getId());
-                        schoolchildList.add(schoolchild1);
+            LibraryCard libraryCard = schoolchild.getLibraryCard();
+            Schoolchild tempschoolchild = new Schoolchild();
+            tempschoolchild.setId(libraryCard.getSchoolchild().getId());
+            LibraryCard libraryCard1 = new LibraryCard(libraryCard.getName(), libraryCard.getExpiredDate(), libraryCard.isStatus(), tempschoolchild);
+            libraryCard1.setId(libraryCard.getId());
+            List<Activities> activitiesList = new ArrayList<>();
+            for(Activities activ: schoolchild.getActivities()){
+                Activities activities = new Activities(activ.getName());
+                activities.setId(activ.getId());
+                activitiesList.add(activities);
+            }
+            Schoolchild schoolchild1 = new Schoolchild(schoolchild.getName(), schoolchild.getSurname(), schoolchild.getParentinfo(), schoolchild.getEmail(), schoolchild.getAddress(), teacher1, libraryCard1, activitiesList);
+            schoolchild1.setId(schoolchild.getId());
+            schoolchildList.add(schoolchild1);
         }
         return schoolchildList;
     }
 
+    // Desra, kuria pertvarkysiu, kolkas palikau, kad veiktu
     @Override
     public List<Teacher> teacherlist() {
         TypedQuery<Teacher> query = entityManager.createQuery("from Teacher", Teacher.class);
